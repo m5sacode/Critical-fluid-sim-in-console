@@ -2,8 +2,8 @@ import controlP5.*;
 
 ControlP5 cp5;
 
-int size = 30;          // grid size (try 200+ for performance test)
-float startDensity = 0.4;
+int size = 300;          // grid size (try 200+ for performance test)
+float startDensity = 0.1;
 float T = 0.1;
 boolean[][] state_screen = new boolean[size][size];
 
@@ -35,7 +35,7 @@ void setup() {
 
 // === Drawing loop ===
 void draw() {
-  int stepsPerFrame = 800*size/30;  // do many updates per frame for smoother dynamics
+  int stepsPerFrame = 1200*size/30;  // do many updates per frame for smoother dynamics
   for (int i=0; i<stepsPerFrame; i++) {
     Update_and_Draw(state_screen, size, T);
   }
