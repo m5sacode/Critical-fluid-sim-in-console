@@ -1,4 +1,10 @@
-int size = 20;
+import controlP5.*;
+
+ControlP5 cp5;
+
+
+
+int size = 30;
 float T = 0.1;
 boolean[][] state_screen = new boolean[size][size];
 
@@ -29,7 +35,9 @@ void Generate_random(int size, boolean[][] state_screen, float prob) {
 
 void Draw_Screen_Console(boolean[][] screen, int size, String white, String black) {
   String line = "";
-  println("\n \n \n \n ");
+  String separator = "";
+  for (int i=0; i<size; i++) separator+="---";
+  println("\n" + separator + " \n");
   for (int y=0; y<size; y++) {
     line = "";
 
@@ -42,7 +50,7 @@ void Draw_Screen_Console(boolean[][] screen, int size, String white, String blac
     }
     println(line);
   }
-  println("\n \n \n \n ");
+  println("\n \n" + separator + "\n");
 }
 
 int Get_pixel_energy(boolean[][] screen, int size, int x, int y) {
@@ -101,14 +109,19 @@ void Update_state(boolean[][] screen, int size, float T) {
 //}
 
 void setup() {
-  size(100, 100);
+  size(300, 100);
+  
   //Generate_checkerboard(size, state_screen);
   Generate_random(size, state_screen, 0.1);
+  // slider for temperature
+  cp5 = new ControlP5(this);
+  cp5.addSlider("T", 0.1, 2, T, 10, height/2 -20, 260, 40).plugTo(this, "T");
 }
 
 void draw() {
-  for (int i = 0; i<1000; i++) {
+  for (int i = 0; i<500; i++) {
     Update_state(state_screen, size, T);
   }
   Draw_Screen_Console(state_screen, size, " @ ", "   ");
+  background(0);
 }
