@@ -2,8 +2,8 @@ import controlP5.*;
 
 ControlP5 cp5;
 
-int size = 400;          // grid size (try 200+ for performance test)
-float startDensity = 0.2;
+int size = 30;          // grid size (try 200+ for performance test)
+float startDensity = 0.4;
 float T = 0.1;
 boolean[][] state_screen = new boolean[size][size];
 
@@ -30,12 +30,12 @@ void setup() {
 
   // slider for temperature
   cp5 = new ControlP5(this);
-  cp5.addSlider("T", 0.01, 0.3, T, 10, height-40, 200, 20).plugTo(this, "T");
+  cp5.addSlider("T", 0.1, 2, T, 10, height-40, 200, 20).plugTo(this, "T");
 }
 
 // === Drawing loop ===
 void draw() {
-  int stepsPerFrame = 5000;  // do many updates per frame for smoother dynamics
+  int stepsPerFrame = 800*size/30;  // do many updates per frame for smoother dynamics
   for (int i=0; i<stepsPerFrame; i++) {
     Update_and_Draw(state_screen, size, T);
   }
@@ -44,9 +44,9 @@ void draw() {
   image(gridImage, 0, 0, width, height);
 
   // overlay text
+  fill(50);
+  rect(0, 0, 150, 50);
   fill(255);
-  rect(0, 0, 220, 40);
-  fill(0);
   textSize(14);
   text("Temperature: " + nf(T, 1, 2), 10, 20);
   text("Rolling avg ΔE: " + nf(getRollingAverage(), 1, 3), 10, 35);
@@ -89,7 +89,10 @@ void Update_and_Draw(boolean[][] screen, int size, float T) {
   if (p1 ^ p2) {
     int e1 = Get_pixel_pot_energy(screen, size, x1, y1);
     int e2 = Get_pixel_pot_energy(screen, size, x2, y2);
-    int energy_dif = e1 - e2;
+    int energy_dif = e2 - e1;
+    if (p1) {
+      energy_dif*=-1;
+    }
 
     recordEnergyDiff(abs(energy_dif));
 
